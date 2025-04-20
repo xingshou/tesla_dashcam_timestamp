@@ -10,50 +10,13 @@ ENV/
 .envrc
 
 # IDE and editor files
-.idea/
-*.sublime-workspace
-*.sublime-project
 .vscode/
 *.code-workspace
-
-# Jupyter notebooks and checkpoints
-notebooks/
-.ipynb_checkpoints/
-
-# Logs
-logs/
-*.log
-
-# Image and video files
-annotated_images/
-video_samples/
-
-# Database files
-*.sqlite3
-
-# Configuration files
-config.yaml
-
-# Compiled files
-*.o
-*.so
-*.dll
 
 # Distribution files
 dist/
 build/
 *.egg-info/
-
-# Test coverage reports
-htmlcov/
-.coverage
-.coverage.*
-nosetests.xml
-coverage.xml
-*.cover
-
-# Pytest cache
-.cache/
 
 # MacOS specific files
 .DS_Store
