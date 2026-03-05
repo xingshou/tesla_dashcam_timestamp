@@ -20,7 +20,7 @@ tesla_dash_cam is a Python application designed to process Tesla dashcam video f
 
 - Python 3.10 or higher
 - FFmpeg installed on your system
-  - macOS: `brew install ffmpeg`
+  - macOS: `brew install ffmpeg-full`
   - Ubuntu: `sudo apt-get install ffmpeg`
   - Windows: Download from [FFmpeg website](https://ffmpeg.org/download.html) and add to PATH
 

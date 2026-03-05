@@ -41,7 +41,9 @@ class MainWindow(QMainWindow):
         self.input_dir_button = QPushButton("Select")
         self.input_dir_button.setFixedWidth(80)
         self.input_dir_label = QLabel("No directory selected")
-        self.input_dir_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        self.input_dir_label.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Preferred
+        )
         dir_layout.addWidget(QLabel("Input Directory:"), 0, 0)
         dir_layout.addWidget(self.input_dir_button, 0, 1)
         dir_layout.addWidget(self.input_dir_label, 0, 2)
@@ -50,7 +52,9 @@ class MainWindow(QMainWindow):
         self.output_dir_button = QPushButton("Select")
         self.output_dir_button.setFixedWidth(80)
         self.output_dir_label = QLabel("No directory selected")
-        self.output_dir_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        self.output_dir_label.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Preferred
+        )
         dir_layout.addWidget(QLabel("Output Directory:"), 1, 0)
         dir_layout.addWidget(self.output_dir_button, 1, 1)
         dir_layout.addWidget(self.output_dir_label, 1, 2)
@@ -97,7 +101,9 @@ class MainWindow(QMainWindow):
         self.video_processor.missing_file_detected.connect(self.on_missing_file)
 
     def select_input_directory(self):
-        dir_path = QFileDialog.getExistingDirectory(self, "Select Input Directory")
+        dir_path = QFileDialog.getExistingDirectory(
+            self, "Select Input Directory"
+        )
         if dir_path:
             self.input_dir = Path(dir_path)
             self.input_dir_label.setText(str(self.input_dir))
@@ -107,7 +113,9 @@ class MainWindow(QMainWindow):
             self.update_convert_button()
 
     def select_output_directory(self):
-        dir_path = QFileDialog.getExistingDirectory(self, "Select Output Directory")
+        dir_path = QFileDialog.getExistingDirectory(
+            self, "Select Output Directory"
+        )
         if dir_path:
             output_path = Path(dir_path)
             if self.input_dir and output_path == self.input_dir:
@@ -161,10 +169,13 @@ class MainWindow(QMainWindow):
             self.file_list.setEnabled(False)
             self.input_dir_button.setEnabled(False)
             self.output_dir_button.setEnabled(False)
-            self.video_processor.process_videos(self.input_dir, self.output_dir, timestamp)
+            self.video_processor.process_videos(
+                self.input_dir, self.output_dir, timestamp
+            )
 
     def reset_status(self):
-        """Reset all file labels, progress bars, and percentage labels to initial state."""
+        """Reset file labels, progress bars, and percentage labels to
+        initial state."""
         for label, bar, progress_label, cam in zip(
             self.file_labels, self.progress_bars, self.progress_labels,
             ["back", "front", "left_repeater", "right_repeater"]
@@ -190,12 +201,19 @@ class MainWindow(QMainWindow):
                 bar.setValue(progress)
                 progress_label.setText(f"{progress}%")
                 if progress == 100:
-                    label.setText(f"{self.current_timestamp}-{cam}.mp4: Completed")
+                    label.setText(
+                        f"{self.current_timestamp}-{cam}.mp4: Completed"
+                    )
                 elif progress > 0:
-                    label.setText(f"{self.current_timestamp}-{cam}.mp4: Processing")
+                    label.setText(
+                        f"{self.current_timestamp}-{cam}.mp4: Processing"
+                    )
 
     def on_conversion_finished(self, camera: str):
-        if camera not in self.completed_cameras and camera not in self.missing_cameras:
+        if (
+            camera not in self.completed_cameras
+            and camera not in self.missing_cameras
+        ):
             self.completed_cameras.add(camera)
             self.conversion_count += 1
             if self.conversion_count >= (4 - len(self.missing_cameras)):
@@ -214,6 +232,8 @@ class MainWindow(QMainWindow):
                 ["back", "front", "left_repeater", "right_repeater"]
             ):
                 if cam == camera:
-                    label.setText(f"{self.current_timestamp}-{cam}.mp4: Missing")
+                    label.setText(
+                        f"{self.current_timestamp}-{cam}.mp4: Missing"
+                    )
                     bar.setValue(0)
                     progress_label.setText("0%")

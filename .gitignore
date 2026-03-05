@@ -7,7 +7,8 @@ venv/
 env/
 ENV/
 .venv/
-.envrc
+.mise.toml
+uv.lock
 
 # IDE and editor files
 .vscode/
