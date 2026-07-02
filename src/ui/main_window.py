@@ -1,12 +1,22 @@
-from pathlib import Path
-from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QPushButton,
-    QFileDialog, QListWidget, QProgressBar, QLabel, QGridLayout, QSizePolicy,
-    QMessageBox
-)
-from utils.file_handler import FileHandler
-from core.video_processor import VideoProcessor
 import logging
+from pathlib import Path
+
+from PySide6.QtWidgets import (
+    QFileDialog,
+    QGridLayout,
+    QLabel,
+    QListWidget,
+    QMainWindow,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
+
+from core.video_processor import VideoProcessor, is_drawtext_filter_available
+from utils.file_handler import FileHandler
 
 # Logging setup
 logging.basicConfig(level=logging.INFO)
@@ -16,7 +26,7 @@ logger = logging.getLogger(__name__)
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Tesla Dashcam - Put Timestamp v0.1.2")
+        self.setWindowTitle("Tesla Dashcam - Put Timestamp v0.1.3")
         self.setMinimumSize(800, 600)
         self.file_handler = FileHandler()
         self.video_processor = VideoProcessor()
@@ -42,7 +52,7 @@ class MainWindow(QMainWindow):
         self.input_dir_button.setFixedWidth(80)
         self.input_dir_label = QLabel("No directory selected")
         self.input_dir_label.setSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Preferred
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
         )
         dir_layout.addWidget(QLabel("Input Directory:"), 0, 0)
         dir_layout.addWidget(self.input_dir_button, 0, 1)
@@ -53,7 +63,7 @@ class MainWindow(QMainWindow):
         self.output_dir_button.setFixedWidth(80)
         self.output_dir_label = QLabel("No directory selected")
         self.output_dir_label.setSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Preferred
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
         )
         dir_layout.addWidget(QLabel("Output Directory:"), 1, 0)
         dir_layout.addWidget(self.output_dir_button, 1, 1)
@@ -123,7 +133,7 @@ class MainWindow(QMainWindow):
                     self,
                     "Warning",
                     "Output directory cannot be the same as input directory",
-                    QMessageBox.Ok
+                    QMessageBox.StandardButton.Ok
                 )
                 self.select_output_directory()
                 return
@@ -150,6 +160,18 @@ class MainWindow(QMainWindow):
     def start_conversion(self):
         selected_items = self.file_list.selectedItems()
         if not selected_items or not self.output_dir:
+            return
+        if not is_drawtext_filter_available():
+            QMessageBox.critical(
+                self,
+                "FFmpeg Error",
+                "The installed ffmpeg is missing the drawtext filter,\n"
+                "so timestamps cannot be overlaid.\n\n"
+                "Reinstall ffmpeg from the terminal:\n"
+                "brew uninstall ffmpeg\n"
+                "brew install ffmpeg-full",
+                QMessageBox.StandardButton.Ok,
+            )
             return
         timestamp = selected_items[0].text()
         self.current_timestamp = timestamp

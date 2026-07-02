@@ -1,13 +1,31 @@
-from pathlib import Path
-from PySide6.QtCore import Signal, QObject, QTimer
-from ffmpeg_progress_yield import FfmpegProgress
-from datetime import datetime
-from multiprocessing import Process, Queue
 import logging
+import subprocess
+from datetime import datetime
+from functools import lru_cache
+from multiprocessing import Process, Queue
+from pathlib import Path
+
+from ffmpeg_progress_yield import FfmpegProgress
+from PySide6.QtCore import QObject, QTimer, Signal
 
 # Logging setup
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=1)
+def is_drawtext_filter_available() -> bool:
+    """Check whether the local ffmpeg build supports the drawtext filter."""
+    try:
+        result = subprocess.run(
+            ["ffmpeg", "-hide_banner", "-filters"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        return "drawtext" in result.stdout
+    except FileNotFoundError:
+        return False
 
 
 def process_video(
