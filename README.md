@@ -1,6 +1,6 @@
 # tesla_dashcam_timestamp
 
-**Version: v0.1.2**
+**Version: v0.1.3**
 
 tesla_dash_cam is a Python application designed to process Tesla dashcam video files by overlaying timestamps using FFmpeg. It provides a user-friendly GUI built with PySide6, allowing users to select input and output directories, view grouped video files, and convert them in parallel with real-time progress updates.
 
@@ -115,6 +115,11 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 
 ## Changelog
+
+### v0.1.3 (2026-07-03)
+
+- Add a preflight check for ffmpeg's `drawtext` filter before starting conversion
+- Show a clear error dialog and block conversion when `drawtext` is unavailable, instead of failing silently
 
 ### v0.1.2 (2025-04-14)
 
